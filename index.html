@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Compras</title>
+    <style>
+        /* Paleta de cores e variáveis reutilizáveis */
+        :root {
+            --cor-primaria: #4CAF50;
+            --cor-secundaria: #f44336;
+            --fundo: #f0f0f0;
+            --texto: #333;
+            --branco: #fff;
+            --sombra: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --borda: 10px;
+        }
+
+        /* Reset e estilo base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--fundo);
+            color: var(--texto);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: var(--branco);
+            padding: 30px;
+            border-radius: var(--borda);
+            box-shadow: var(--sombra);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--cor-primaria);
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: var(--borda);
+            background-color: white;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--borda);
+            background-color: var(--cor-primaria);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #e9f5ea;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: var(--borda);
+        }
+
+        .remover {
+            background-color: var(--cor-secundaria);
+            padding: 6px 12px;
+            border-radius: var(--borda);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .remover:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Lista de Compras</h1>
+
+        <!-- Formulário para adicionar item -->
+        <form id="formulario">
+            <input type="text" id="nome" placeholder="Nome do produto" required />
+            <select id="quantidade" required>
+                <option value="" disabled selected>Qtd</option>
+                <option value="1">1 un</option>
+                <option value="2">2 un</option>
+                <option value="3">3 un</option>
+                <option value="4">4 un</option>
+                <option value="5">5 un</option>
+                <option value="6">6 un</option>
+                <option value="12">12 un (1 dúzia)</option>
+                <option value="24">24 un</option>
+            </select>
+            <button type="submit">Adicionar</button>
+        </form>
+
+        <!-- Lista de compras -->
+        <ul id="lista">
+            <!-- Os itens serão adicionados aqui dinamicamente -->
+        </ul>
+    </div>
+
+    <script>
+        // Seleciona elementos do DOM
+        const form = document.getElementById('formulario');
+        const nomeInput = document.getElementById('nome');
+        const quantidadeInput = document.getElementById('quantidade');
+        const lista = document.getElementById('lista');
+
+        // Função para criar e exibir um novo item na lista
+        function adicionarItem(nome, quantidade) {
+            // Cria o elemento <li>
+            const li = document.createElement('li');
+            li.innerHTML = `
+                ${nome} - ${quantidade}x
+                <button class="remover">Remover</button>
+            `;
+
+            // Adiciona evento de remoção ao botão
+            li.querySelector('.remover').addEventListener('click', () => {
+                li.remove(); // Remove o item do DOM
+            });
+
+            // Adiciona o item à lista
+            lista.appendChild(li);
+        }
+
+        // Evento de envio do formulário
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Impede o recarregamento da página
+
+            const nome = nomeInput.value.trim();
+            const quantidade = quantidadeInput.value;
+
+            // Validação simples
+            if (nome && quantidade) {
+                adicionarItem(nome, quantidade);
+                form.reset(); // Limpa o formulário
+            }
+        });
+    </script>
+</body>
+
+</html>
