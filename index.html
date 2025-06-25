@@ -6,31 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lista de Compras</title>
     <style>
-        /* Paleta de cores e variáveis reutilizáveis */
         :root {
-            --cor-primaria: #4CAF50;
-            --cor-secundaria: #f44336;
-            --fundo: #f0f0f0;
-            --texto: #333;
-            --branco: #fff;
-            --sombra: 0 4px 8px rgba(0, 0, 0, 0.1);
-            --borda: 10px;
+            --cor-primaria: #a78bfa;
+            /* Roxo claro */
+            --cor-secundaria: #60a5fa;
+            /* Azul bebê */
+            --fundo: #f4f0ff;
+            /* Fundo lilás bem claro */
+            --texto: #2e2e2e;
+            --branco: #ffffff;
+            --sombra: 0 4px 12px rgba(160, 140, 255, 0.2);
+            --borda: 12px;
         }
-
-        /* Reset e estilo base */
+    
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
+    
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--fundo);
             color: var(--texto);
             padding: 20px;
         }
-
+    
         .container {
             max-width: 600px;
             margin: auto;
@@ -38,29 +39,42 @@
             padding: 30px;
             border-radius: var(--borda);
             box-shadow: var(--sombra);
+            transition: transform 0.3s;
         }
-
+    
+        .container:hover {
+            transform: scale(1.01);
+        }
+    
         h1 {
             text-align: center;
             color: var(--cor-primaria);
             margin-bottom: 20px;
+            font-size: 2rem;
         }
-
+    
         form {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
-
+    
         input[type="text"],
         select {
             flex: 1;
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #d4d4d8;
             border-radius: var(--borda);
-            background-color: white;
+            background-color: #fafafa;
+            transition: border-color 0.3s;
         }
-
+    
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--cor-primaria);
+        }
+    
         button {
             padding: 10px 20px;
             border: none;
@@ -68,40 +82,58 @@
             background-color: var(--cor-primaria);
             color: white;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
-
+    
         button:hover {
-            background-color: #45a049;
+            background-color: #8b5cf6;
+            transform: scale(1.05);
         }
-
+    
         ul {
             list-style: none;
         }
-
+    
         li {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #e9f5ea;
-            padding: 10px;
+            background: #e0e7ff;
+            padding: 12px;
             margin-bottom: 10px;
             border-radius: var(--borda);
+            font-size: 1rem;
         }
-
+    
         .remover {
             background-color: var(--cor-secundaria);
             padding: 6px 12px;
             border-radius: var(--borda);
             color: white;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
-
+    
         .remover:hover {
-            background-color: #d32f2f;
+            background-color: #3b82f6;
+            transform: scale(1.05);
         }
-    </style>
+    
+        #limpar-tudo {
+            background-color: #ec4899;
+            /* Rosa vibrante para contraste */
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: var(--borda);
+            font-weight: bold;
+        }
+    
+        #limpar-tudo:hover {
+            background-color: #db2777;
+        }
+    
+        </style>
 </head>
 
 <body>
@@ -127,49 +159,52 @@
 
         <!-- Lista de compras -->
         <ul id="lista">
-            <!-- Os itens serão adicionados aqui dinamicamente -->
+            <!-- Itens adicionados aparecem aqui -->
         </ul>
+
+        <!-- Botão de limpar tudo -->
+        <button id="limpar-tudo">Limpar Tudo</button>
     </div>
 
     <script>
-        // Seleciona elementos do DOM
         const form = document.getElementById('formulario');
         const nomeInput = document.getElementById('nome');
         const quantidadeInput = document.getElementById('quantidade');
         const lista = document.getElementById('lista');
+        const btnLimparTudo = document.getElementById('limpar-tudo');
 
-        // Função para criar e exibir um novo item na lista
         function adicionarItem(nome, quantidade) {
-            // Cria o elemento <li>
             const li = document.createElement('li');
             li.innerHTML = `
-                ${nome} - ${quantidade}x
-                <button class="remover">Remover</button>
-            `;
+        ${nome} - ${quantidade}x
+        <button class="remover">Remover</button>
+      `;
 
-            // Adiciona evento de remoção ao botão
             li.querySelector('.remover').addEventListener('click', () => {
-                li.remove(); // Remove o item do DOM
+                li.remove();
             });
 
-            // Adiciona o item à lista
             lista.appendChild(li);
         }
 
-        // Evento de envio do formulário
         form.addEventListener('submit', function (e) {
-            e.preventDefault(); // Impede o recarregamento da página
+            e.preventDefault();
 
             const nome = nomeInput.value.trim();
             const quantidade = quantidadeInput.value;
 
-            // Validação simples
             if (nome && quantidade) {
                 adicionarItem(nome, quantidade);
-                form.reset(); // Limpa o formulário
+                form.reset();
+            }
+        });
+
+        btnLimparTudo.addEventListener('click', function () {
+            if (confirm("Tem certeza que deseja limpar a lista inteira?")) {
+                lista.innerHTML = '';
             }
         });
     </script>
 </body>
 
-</html>
+</html
