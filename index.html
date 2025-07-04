@@ -134,6 +134,7 @@
   <div class="container">
     <h1>Lista de Compras</h1>
 
+    <!-- Formulário para adicionar itens -->
     <form id="formulario">
       <input type="text" id="nome" placeholder="Nome do produto" required />
       <select id="quantidade" required>
@@ -150,27 +151,37 @@
       <button type="submit">Adicionar</button>
     </form>
 
+    <!-- Lista onde os itens serão exibidos -->
     <ul id="lista"></ul>
+    <!-- Botão para limpar todos os itens -->
     <button id="limpar-tudo">Limpar Tudo</button>
   </div>
 
   <script>
+    // Seleção de elementos HTML
     const form = document.getElementById('formulario');
     const nomeInput = document.getElementById('nome');
     const quantidadeInput = document.getElementById('quantidade');
     const lista = document.getElementById('lista');
     const btnLimparTudo = document.getElementById('limpar-tudo');
 
+    // 🔸 Recupera os itens salvos no localStorage (ou inicia vazio)
     let itens = JSON.parse(localStorage.getItem('itensCompra')) || [];
 
+    // 🔸 Função para salvar os itens no localStorage
     function salvarNoLocalStorage() {
       localStorage.setItem('itensCompra', JSON.stringify(itens));
     }
 
+    // 🔸 Renderiza a lista de compras na tela
     function renderizarLista() {
-      lista.innerHTML = '';
+      lista.innerHTML = ''; // Limpa a lista atual
+
+      // Percorre todos os itens salvos
       itens.forEach((item, index) => {
         const li = document.createElement('li');
+
+        // Cria item de lista com botão "Remover"
         li.innerHTML = `
           ${item.nome} - ${item.quantidade}x
           <button class="remover" data-index="${index}">Remover</button>
@@ -178,40 +189,46 @@
         lista.appendChild(li);
       });
 
+      // 🔹 EVENT LISTENER: Botões "Remover"
+      // Para cada botão "Remover" adicionado à lista:
       document.querySelectorAll('.remover').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const index = e.target.getAttribute('data-index');
-          itens.splice(index, 1);
-          salvarNoLocalStorage();
-          renderizarLista();
+          itens.splice(index, 1);             // Remove o item do array
+          salvarNoLocalStorage();             // Atualiza o localStorage
+          renderizarLista();                  // Atualiza a lista na tela
         });
       });
     }
 
+    // 🔹 EVENT LISTENER: Quando o formulário for enviado
     form.addEventListener('submit', function (e) {
-      e.preventDefault();
+      e.preventDefault(); // Impede recarregamento da página
 
       const nome = nomeInput.value.trim();
       const quantidade = quantidadeInput.value;
 
       if (nome && quantidade) {
+        // Adiciona novo item à lista
         itens.push({ nome, quantidade });
-        salvarNoLocalStorage();
-        renderizarLista();
-        form.reset();
+        salvarNoLocalStorage(); // Salva no localStorage
+        renderizarLista();      // Re-renderiza lista
+        form.reset();           // Limpa os campos do formulário
       }
     });
 
+    // 🔹 EVENT LISTENER: Botão "Limpar Tudo"
     btnLimparTudo.addEventListener('click', function () {
       if (confirm("Tem certeza que deseja limpar a lista inteira?")) {
-        itens = [];
-        salvarNoLocalStorage();
-        renderizarLista();
+        itens = [];                   // Esvazia o array de itens
+        salvarNoLocalStorage();       // Limpa no localStorage
+        renderizarLista();            // Limpa visualmente a lista
       }
     });
 
-    // Inicializa
+    // 🔸 Inicializa a lista na tela com os dados do localStorage
     renderizarLista();
   </script>
 </body>
+
 </html>
