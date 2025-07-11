@@ -1,234 +1,196 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lista de Compras</title>
-  <style>
-    :root {
-      --cor-primaria: #a78bfa;
-      --cor-secundaria: #60a5fa;
-      --fundo: #f4f0ff;
-      --texto: #2e2e2e;
-      --branco: #ffffff;
-      --sombra: 0 4px 12px rgba(160, 140, 255, 0.2);
-      --borda: 12px;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Compras Avançada</title>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--fundo);
-      color: var(--texto);
-      padding: 20px;
-    }
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: var(--branco);
-      padding: 30px;
-      border-radius: var(--borda);
-      box-shadow: var(--sombra);
-      transition: transform 0.3s;
-    }
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .container:hover {
-      transform: scale(1.01);
-    }
+        .item-info {
+            flex-grow: 1;
+        }
 
-    h1 {
-      text-align: center;
-      color: var(--cor-primaria);
-      margin-bottom: 20px;
-      font-size: 2rem;
-    }
+        .badge {
+            margin-left: 5px;
+        }
 
-    form {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    input[type="text"],
-    select {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #d4d4d8;
-      border-radius: var(--borda);
-      background-color: #fafafa;
-      transition: border-color 0.3s;
-    }
-
-    input[type="text"]:focus,
-    select:focus {
-      outline: none;
-      border-color: var(--cor-primaria);
-    }
-
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: var(--borda);
-      background-color: var(--cor-primaria);
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
-
-    button:hover {
-      background-color: #8b5cf6;
-      transform: scale(1.05);
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #e0e7ff;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: var(--borda);
-      font-size: 1rem;
-    }
-
-    .remover {
-      background-color: var(--cor-secundaria);
-      padding: 6px 12px;
-      border-radius: var(--borda);
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
-
-    .remover:hover {
-      background-color: #3b82f6;
-      transform: scale(1.05);
-    }
-
-    #limpar-tudo {
-      background-color: #ec4899;
-      width: 100%;
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: var(--borda);
-      font-weight: bold;
-    }
-
-    #limpar-tudo:hover {
-      background-color: #db2777;
-    }
-  </style>
+        .btn-group-sm button {
+            margin-left: 5px;
+        }
+    </style>
 </head>
-<body>
-  <div class="container">
-    <h1>Lista de Compras</h1>
 
-    <!-- Formulário para adicionar itens -->
-    <form id="formulario">
-      <input type="text" id="nome" placeholder="Nome do produto" required />
-      <select id="quantidade" required>
-        <option value="" disabled selected>Qtd</option>
-        <option value="1">1 un</option>
-        <option value="2">2 un</option>
-        <option value="3">3 un</option>
-        <option value="4">4 un</option>
-        <option value="5">5 un</option>
-        <option value="6">6 un</option>
-        <option value="12">12 un (1 dúzia)</option>
-        <option value="24">24 un</option>
-      </select>
-      <button type="submit">Adicionar</button>
-    </form>
+<body class="bg-light">
 
-    <!-- Lista onde os itens serão exibidos -->
-    <ul id="lista"></ul>
-    <!-- Botão para limpar todos os itens -->
-    <button id="limpar-tudo">Limpar Tudo</button>
-  </div>
+    <div class="container py-5">
+        <h1 class="text-center mb-4">🛒 Lista de Compras</h1>
 
-  <script>
-    // Seleção de elementos HTML
-    const form = document.getElementById('formulario');
-    const nomeInput = document.getElementById('nome');
-    const quantidadeInput = document.getElementById('quantidade');
-    const lista = document.getElementById('lista');
-    const btnLimparTudo = document.getElementById('limpar-tudo');
+        <div class="row mb-3 g-2">
+            <div class="col-md-4">
+                <input type="text" id="itemNome" class="form-control" placeholder="Item (ex: Arroz)">
+            </div>
+            <div class="col-md-3">
+                <input type="number" id="itemQtd" class="form-control" placeholder="Qtd (ex: 2)">
+            </div>
+            <div class="col-md-2">
+                <select id="itemCategoria" class="form-select">
+                    <option selected disabled>Categoria</option>
+                    <option>Alimentos</option>
+                    <option>Bebidas</option>
+                    <option>Limpeza</option>
+                    <option>Outros</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select id="itemCor" class="form-select">
+                    <option selected disabled>Cor</option>
+                    <option>Azul</option>
+                    <option>Vermelho</option>
+                    <option>Branco</option>
+                    <option>Verde</option>
+                </select>
+            </div>
+            <div class="col-md-1 d-grid">
+                <button class="btn btn-success" onclick="adicionarItem()">+</button>
+            </div>
+        </div>
 
-    // 🔸 Recupera os itens salvos no localStorage (ou inicia vazio)
-    let itens = JSON.parse(localStorage.getItem('itensCompra')) || [];
+        <div class="text-end mb-3">
+            <button class="btn btn-danger btn-sm" onclick="limparLista()">🗑 Limpar Tudo</button>
+        </div>
 
-    // 🔸 Função para salvar os itens no localStorage
-    function salvarNoLocalStorage() {
-      localStorage.setItem('itensCompra', JSON.stringify(itens));
-    }
+        <ul id="listaCompras" class="list-group"></ul>
+    </div>
 
-    // 🔸 Renderiza a lista de compras na tela
-    function renderizarLista() {
-      lista.innerHTML = ''; // Limpa a lista atual
+    <script>
+        // EventListener 1
+        // é carregado quando o DOM está completamente carregado
+        document.addEventListener('DOMContentLoaded', carregarItens);
 
-      // Percorre todos os itens salvos
-      itens.forEach((item, index) => {
-        const li = document.createElement('li');
+        function carregarItens() {
+            // pega o "compras"
+            const lista = JSON.parse(localStorage.getItem('compras')) || [];
+            lista.forEach(item => criarItemNaLista(item));
+        }
 
-        // Cria item de lista com botão "Remover"
-        li.innerHTML = `
-          ${item.nome} - ${item.quantidade}x
-          <button class="remover" data-index="${index}">Remover</button>
-        `;
-        lista.appendChild(li);
-      });
+        function adicionarItem() {
+            const nome = document.getElementById('itemNome').value.trim();
+            const qtd = document.getElementById('itemQtd').value.trim();
+            const categoria = document.getElementById('itemCategoria').value;
+            const cor = document.getElementById('itemCor').value;
 
-      // 🔹 EVENT LISTENER: Botões "Remover"
-      // Para cada botão "Remover" adicionado à lista:
-      document.querySelectorAll('.remover').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const index = e.target.getAttribute('data-index');
-          itens.splice(index, 1);             // Remove o item do array
-          salvarNoLocalStorage();             // Atualiza o localStorage
-          renderizarLista();                  // Atualiza a lista na tela
-        });
-      });
-    }
+            if (!nome || !qtd || categoria === 'Categoria' || cor === 'Cor') return;
 
-    // 🔹 EVENT LISTENER: Quando o formulário for enviado
-    form.addEventListener('submit', function (e) {
-      e.preventDefault(); // Impede recarregamento da página
+            const item = { id: Date.now(), nome, qtd, categoria, cor };
+            salvarItem(item);
+            criarItemNaLista(item);
+            limparCampos();
+        }
 
-      const nome = nomeInput.value.trim();
-      const quantidade = quantidadeInput.value;
+        function criarItemNaLista(item) {
+            const lista = document.getElementById('listaCompras');
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.dataset.id = item.id;
 
-      if (nome && quantidade) {
-        // Adiciona novo item à lista
-        itens.push({ nome, quantidade });
-        salvarNoLocalStorage(); // Salva no localStorage
-        renderizarLista();      // Re-renderiza lista
-        form.reset();           // Limpa os campos do formulário
-      }
-    });
 
-    // 🔹 EVENT LISTENER: Botão "Limpar Tudo"
-    btnLimparTudo.addEventListener('click', function () {
-      if (confirm("Tem certeza que deseja limpar a lista inteira?")) {
-        itens = [];                   // Esvazia o array de itens
-        salvarNoLocalStorage();       // Limpa no localStorage
-        renderizarLista();            // Limpa visualmente a lista
-      }
-    });
+            const span = document.createElement('span');
+            span.className = 'item-info';
+            span.innerHTML = `${item.nome} <span class="badge bg-secondary">${item.qtd}x</span> <span class="badge bg-info">${item.categoria}</span> <span class="badge bg-info">${item.cor}</span>`;
 
-    // 🔸 Inicializa a lista na tela com os dados do localStorage
-    renderizarLista();
-  </script>
+            const editarBtn = document.createElement('button');
+            editarBtn.className = 'btn btn-warning btn-sm';
+            editarBtn.textContent = 'Editar';
+            editarBtn.onclick = () => editarItem(item.id);
+
+            const removerBtn = document.createElement('button');
+            removerBtn.className = 'btn btn-danger btn-sm';
+            removerBtn.textContent = 'Remover';
+            removerBtn.onclick = () => removerItem(item.id);
+
+            const btnGroup = document.createElement('div');
+            btnGroup.className = 'btn-group-sm';
+            btnGroup.appendChild(editarBtn);
+            btnGroup.appendChild(removerBtn);
+
+            li.appendChild(span);
+            li.appendChild(btnGroup);
+
+            lista.appendChild(li);
+        }
+
+        function salvarItem(item) {
+            // pega o "compras"
+            const lista = JSON.parse(localStorage.getItem('compras')) || [];
+            lista.push(item);
+            // define o "compras"
+            localStorage.setItem('compras', JSON.stringify(lista));
+        }
+
+        function removerItem(id) {
+            // pega o "compras"
+            let lista = JSON.parse(localStorage.getItem('compras')) || [];
+            lista = lista.filter(item => item.id !== id);
+            // define o "compras"
+            localStorage.setItem('compras', JSON.stringify(lista));
+            document.querySelector(`[data-id="${id}"]`).remove();
+        }
+
+        function editarItem(id) {
+            // pega o "compras"
+            let lista = JSON.parse(localStorage.getItem('compras')) || [];
+            const item = lista.find(item => item.id === id);
+
+            const novoNome = prompt('Editar nome:', item.nome);
+            const novaQtd = prompt('Editar quantidade:', item.qtd);
+            const novaCategoria = prompt('Editar categoria:', item.categoria);
+            const novaCor = prompt('Editar cor', item.cor);
+
+            if (!novoNome || !novaQtd || !novaCategoria || !novaCor) return;
+
+            item.nome = novoNome;
+            item.qtd = novaQtd;
+            item.categoria = novaCategoria;
+            item.cor = novaCor;
+            // define o "compras"
+            localStorage.setItem('compras', JSON.stringify(lista));
+            atualizarListaVisual();
+        }
+
+        function limparCampos() {
+            document.getElementById('itemNome').value = '';
+            document.getElementById('itemQtd').value = '';
+            document.getElementById('itemCategoria').selectedIndex = 0;
+            document.getElementById('itemCor').selectedIndex = 0;
+        }
+
+        function limparLista() {
+            if (confirm('Tem certeza que deseja apagar toda a lista?')) {
+                // remove o "compras"
+                localStorage.removeItem('compras');
+                document.getElementById('listaCompras').innerHTML = '';
+            }
+        }
+
+        function atualizarListaVisual() {
+            document.getElementById('listaCompras').innerHTML = '';
+            carregarItens();
+        }
+    </script>
 </body>
 
 </html>
